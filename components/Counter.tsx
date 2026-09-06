@@ -30,7 +30,7 @@ export default function Counter({ since }: { since: string }) {
     return (
         <>
             <p className="sub">
-                since{" "}
+                hình như là từ ngày {" "}
                 {start.toLocaleDateString("en-GB", {
                     year: "numeric",
                     month: "long",
@@ -40,12 +40,12 @@ export default function Counter({ since }: { since: string }) {
             </p>
             <p className="count">
                 {now === null ? "—" : daysSince(start, new Date(now)).toLocaleString()}
-                <small>days together</small>
+                <small>chà bá cỡ nhiêu đây ngày</small>
             </p>
             <p className="clock">
                 {now === null
                     ? "\u00a0"
-                    : `${pad(Math.floor(ms / 3_600_000) % 24)}:${pad(Math.floor(ms / 60_000) % 60)}:${pad(Math.floor(ms / 1000) % 60)} and counting`}
+                    : `${pad(Math.floor(ms / 3_600_000) % 24)}:${pad(Math.floor(ms / 60_000) % 60)}:${pad(Math.floor(ms / 1000) % 60)} và còn dài lắm`}
             </p>
         </>
     );

@@ -43,7 +43,7 @@ export default async function Home() {
             </div>
 
             {photos.length === 0 ? (
-                <p className="empty">No photos yet.</p>
+                <p className="empty">Chưa có hình loz ơi.</p>
             ) : (
                 <div className="gallery">
                     {photos.map((photo) => {

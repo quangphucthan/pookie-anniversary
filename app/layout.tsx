@@ -9,7 +9,7 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-    title: "For you",
+    title: "tôi yêu 36",
     robots: { index: false, follow: false },
 };
 
