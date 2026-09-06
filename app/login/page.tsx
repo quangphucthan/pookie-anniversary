@@ -26,7 +26,7 @@ export default function Login() {
 
     return (
         <form className="login" onSubmit={signIn}>
-            <h1>Hi you</h1>
+            <h1>Helo Bi Fat :D</h1>
             <input
                 type="email"
                 placeholder="email"
@@ -44,7 +44,7 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
             />
             <button type="submit" disabled={busy}>
-                {busy ? "…" : "Login"}
+                {busy ? "…" : "Vào đê!"}
             </button>
             {error && <p className="error">{error}</p>}
         </form>

@@ -55,7 +55,7 @@ export default function Toolbar() {
         <>
             <div className="bar">
                 <label className="btn">
-                    {busy ? "Uploading…" : "Add Photos"}
+                    {busy ? "Uploading…" : "Up hình đuy"}
                     <input
                         type="file"
                         accept="image/*"
@@ -73,7 +73,7 @@ export default function Toolbar() {
                         router.push("/login");
                     }}
                 >
-                    Sign Out
+                    Lóg out
                 </button>
             </div>
             {error && <p className="error">{error}</p>}
