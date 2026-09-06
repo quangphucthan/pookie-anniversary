@@ -40,17 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-<<<<<<< HEAD
 !.env.example
-<<<<<<< HEAD
-=======
-=======
->>>>>>> b0e98dff5f08e57dd7173e3d7c36ad77721aafd6
 
 AGENTS.md
 CLAUDE.md
 skills.md
-<<<<<<< HEAD
->>>>>>> 315785f (init files)
-=======
->>>>>>> b0e98dff5f08e57dd7173e3d7c36ad77721aafd6
