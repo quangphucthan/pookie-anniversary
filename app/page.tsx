@@ -46,7 +46,7 @@ export default async function Home() {
                 <p className="empty">Chưa có hình loz ơi.</p>
             ) : (
                 <div className="gallery">
-                    {photos.map((photo) => {
+                    {photos.map((photo, i) => {
                         const url = urls.get(photo.path);
                         if (!url) return null;
                         return (
@@ -57,6 +57,10 @@ export default async function Home() {
                                         alt={photo.caption ?? ""}
                                         fill
                                         sizes="(max-width: 34rem) 50vw, 11rem"
+                                        // ponytail: a row is 2 tiles on mobile, 3 on desktop, and any
+                                        // of them can be the LCP — so eager, not preload. Bump if the
+                                        // grid ever gets wider than 34rem.
+                                        loading={i < 3 ? "eager" : "lazy"}
                                     />
                                 </div>
                                 {photo.caption && <figcaption>{photo.caption}</figcaption>}
