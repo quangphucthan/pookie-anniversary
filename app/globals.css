@@ -1,0 +1,183 @@
+:root {
+    --ink: #3d2b33;
+    --soft: #8a6f7a;
+    --bg: #fff6f4;
+    --accent: #d2607a;
+    --line: #f0d7dc;
+}
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 2rem 1.25rem;
+    background: radial-gradient(120% 90% at 50% 0%, #ffe9ec 0%, var(--bg) 55%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font:
+        16px/1.7 var(--font-lora),
+        Georgia,
+        "Times New Roman",
+        serif;
+}
+main {
+    max-width: 34rem;
+    margin: 0 auto;
+    text-align: center;
+}
+h1 {
+    font-size: clamp(2rem, 7vw, 3.25rem);
+    font-weight: 500;
+    margin: 0 0 0.25rem;
+    letter-spacing: -0.02em;
+}
+.sub {
+    color: var(--soft);
+    margin: 0 0 2.5rem;
+    font-style: italic;
+}
+.count {
+    font-size: clamp(3rem, 14vw, 5.5rem);
+    line-height: 1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+}
+.count small {
+    display: block;
+    font-size: 1rem;
+    color: var(--soft);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 0.75rem;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.clock {
+    color: var(--soft);
+    font-variant-numeric: tabular-nums;
+    margin: 0.5rem 0 2.5rem;
+}
+.letter {
+    text-align: left;
+    border-top: 1px solid var(--line);
+    padding-top: 2rem;
+}
+.letter p {
+    margin: 0 0 1.25rem;
+}
+.sign {
+    text-align: right;
+    color: var(--accent);
+    font-style: italic;
+}
+.heart {
+    display: inline-block;
+    animation: beat 1.6s ease-in-out infinite;
+}
+@keyframes beat {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    15% {
+        transform: scale(1.18);
+    }
+    30% {
+        transform: scale(1);
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .heart {
+        animation: none;
+    }
+}
+
+.gallery {
+    display: grid;
+    /* auto-fill, not auto-fit: auto-fit collapses the empty tracks, so a lone
+     photo would stretch across the whole column and shrink as you add more.
+     Thumbnails stay ~9rem no matter how many there are. */
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+.gallery figure {
+    margin: 0;
+}
+.shot {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: var(--line);
+}
+.shot img {
+    object-fit: cover;
+}
+.gallery figcaption {
+    font-size: 0.8rem;
+    color: var(--soft);
+    margin-top: 0.35rem;
+}
+.empty {
+    color: var(--soft);
+    font-style: italic;
+    margin-top: 2rem;
+}
+
+.bar {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.9rem;
+}
+button,
+.btn {
+    font: inherit;
+    color: #fff;
+    background: var(--accent);
+    border: 0;
+    border-radius: 999px;
+    padding: 0.55rem 1.25rem;
+    cursor: pointer;
+}
+button:disabled {
+    opacity: 0.5;
+    cursor: progress;
+}
+.link {
+    background: none;
+    color: var(--soft);
+    text-decoration: underline;
+    padding: 0.55rem 0;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    font: inherit;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 0.5rem;
+    background: #fff;
+    color: inherit;
+    width: 100%;
+}
+.login {
+    max-width: 20rem;
+    margin: 15vh auto;
+    display: grid;
+    gap: 0.75rem;
+    text-align: left;
+}
+.error {
+    color: #b3324c;
+    font-size: 0.9rem;
+    margin: 0;
+}
