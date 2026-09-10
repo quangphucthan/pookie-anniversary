@@ -30,7 +30,7 @@ export default function Counter({ since }: { since: string }) {
     return (
         <>
             <p className="sub">
-                hình như là từ ngày {" "}
+                hình như là từ ngày{" "}
                 {start.toLocaleDateString("en-GB", {
                     year: "numeric",
                     month: "long",

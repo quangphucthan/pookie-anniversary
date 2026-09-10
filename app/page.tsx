@@ -1,11 +1,21 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import type { CSSProperties } from "react";
 import Counter from "@/components/Counter";
+import EmptyAlbum from "@/components/EmptyAlbum";
 import Toolbar from "@/components/Toolbar";
 import { CONFIG } from "@/config";
+import { groupByMonth } from "@/lib/photos";
 import { createClient } from "@/lib/supabase/server";
 
 type Photo = { id: string; path: string; caption: string | null; taken_on: string | null };
+
+// ponytail: a row is 2 tiles on mobile, 3 on desktop, and any of them can be the
+// LCP -- so eager, not preload. Bump if the grid ever gets wider than 34rem.
+const EAGER_TILES = 3;
+// Tiles fade in one after another. Past this the tail of a fat month would spend
+// longer waiting on its delay than actually animating, which just reads as lag.
+const MAX_STAGGER = 7;
 
 export default async function Home() {
     const supabase = await createClient();
@@ -24,11 +34,20 @@ export default async function Home() {
     // the whole page, not one per photo.
     const { data: signed } = photos.length
         ? await supabase.storage.from("photos").createSignedUrls(
-                photos.map((p) => p.path),
-                3600,
-            )
+              photos.map((p) => p.path),
+              3600,
+          )
         : { data: [] };
     const urls = new Map(signed?.map((s) => [s.path, s.signedUrl]) ?? []);
+
+    // Pair each photo with its URL up front and drop the ones that didn't mint.
+    // Bailing out mid-render instead would let a month section come out empty and
+    // would spend the eager-loading window below on tiles that never appear.
+    const shots = photos.flatMap((photo) => {
+        const url = urls.get(photo.path);
+        return url ? [{ ...photo, url }] : [];
+    });
+    const eager = new Set(shots.slice(0, EAGER_TILES).map((shot) => shot.path));
 
     return (
         <main>
@@ -42,32 +61,33 @@ export default async function Home() {
                 <p className="sign">{CONFIG.signature}</p>
             </div>
 
-            {photos.length === 0 ? (
-                <p className="empty">Chưa có hình loz ơi.</p>
+            {shots.length === 0 ? (
+                <EmptyAlbum />
             ) : (
-                <div className="gallery">
-                    {photos.map((photo, i) => {
-                        const url = urls.get(photo.path);
-                        if (!url) return null;
-                        return (
-                            <figure key={photo.id}>
-                                <div className="shot">
-                                    <Image
-                                        src={url}
-                                        alt={photo.caption ?? ""}
-                                        fill
-                                        sizes="(max-width: 34rem) 50vw, 11rem"
-                                        // ponytail: a row is 2 tiles on mobile, 3 on desktop, and any
-                                        // of them can be the LCP — so eager, not preload. Bump if the
-                                        // grid ever gets wider than 34rem.
-                                        loading={i < 3 ? "eager" : "lazy"}
-                                    />
-                                </div>
-                                {photo.caption && <figcaption>{photo.caption}</figcaption>}
-                            </figure>
-                        );
-                    })}
-                </div>
+                groupByMonth(shots).map((month) => (
+                    <section className="month" key={month.key}>
+                        <h2>{month.label}</h2>
+                        <div className="gallery">
+                            {month.photos.map((shot, i) => (
+                                <figure
+                                    key={shot.id}
+                                    style={{ "--i": Math.min(i, MAX_STAGGER) } as CSSProperties}
+                                >
+                                    <div className="shot">
+                                        <Image
+                                            src={shot.url}
+                                            alt={shot.caption ?? ""}
+                                            fill
+                                            sizes="(max-width: 34rem) 50vw, 11rem"
+                                            loading={eager.has(shot.path) ? "eager" : "lazy"}
+                                        />
+                                    </div>
+                                    {shot.caption && <figcaption>{shot.caption}</figcaption>}
+                                </figure>
+                            ))}
+                        </div>
+                    </section>
+                ))
             )}
 
             <Toolbar />
