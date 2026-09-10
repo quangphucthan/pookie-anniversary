@@ -33,10 +33,10 @@ export default async function Home() {
     // Private bucket, so every render mints short-lived signed URLs. One call for
     // the whole page, not one per photo.
     const { data: signed } = photos.length
-        ? await supabase.storage.from("photos").createSignedUrls(
-              photos.map((p) => p.path),
-              3600,
-          )
+            ? await supabase.storage.from("photos").createSignedUrls(
+                photos.map((p) => p.path),
+                3600,
+            )
         : { data: [] };
     const urls = new Map(signed?.map((s) => [s.path, s.signedUrl]) ?? []);
 

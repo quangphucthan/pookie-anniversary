@@ -36,8 +36,8 @@ export default function EmptyAlbum() {
                     opacity="0.85"
                 />
             </svg>
-            <p>Chưa có hình loz ơi.</p>
-            <p className="hint">Bấm “Up hình đuy” ở dưới là có liền.</p>
+            <p>Chưa có hình loz ơi</p>
+            <p className="hint">Bấm “Up hình đuy” ở dưới là lên ngay con ảnh</p>
         </div>
     );
 }
