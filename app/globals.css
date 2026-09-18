@@ -144,6 +144,36 @@ h1 {
 .shot img {
     object-fit: cover;
 }
+.remove {
+    position: absolute;
+    top: 0.35rem;
+    right: 0.35rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: rgba(61, 43, 51, 0.55);
+    color: #fff;
+    border-radius: 50%;
+}
+.remove svg {
+    width: 0.8rem;
+    height: 0.8rem;
+}
+/* Hover has to mean hover -- on touch there's no pre-tap reveal, so the icon
+   stays put there instead of hiding behind a gesture that doesn't exist. */
+@media (hover: hover) {
+    .remove {
+        opacity: 0;
+        transition: opacity 0.15s ease-out;
+    }
+    .shot:hover .remove,
+    .remove:focus-visible {
+        opacity: 1;
+    }
+}
 .gallery figcaption {
     font-size: 0.8rem;
     color: var(--soft);
@@ -271,6 +301,62 @@ input[type="password"] {
     transition: width 0.25s ease-out;
 }
 
+/* allow-discrete keeps `display`/`overlay` at their open values for the whole
+   transition, so close() fades out instead of vanishing -- the browser removes
+   the dialog from the top layer only once the transition ends, no JS timer needed. */
+.confirm {
+    border: 0;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    max-width: 20rem;
+    width: calc(100% - 2.5rem);
+    color: var(--ink);
+    background: #fff;
+    text-align: center;
+    box-shadow: 0 1rem 2.5rem rgba(61, 43, 51, 0.18);
+    opacity: 0;
+    transform: scale(0.96);
+    transition:
+        opacity 0.18s ease-out,
+        transform 0.18s ease-out,
+        display 0.18s allow-discrete,
+        overlay 0.18s allow-discrete;
+}
+.confirm[open] {
+    opacity: 1;
+    transform: scale(1);
+}
+@starting-style {
+    .confirm[open] {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+}
+.confirm::backdrop {
+    background: rgba(61, 43, 51, 0.35);
+    opacity: 0;
+    transition:
+        opacity 0.18s ease-out,
+        display 0.18s allow-discrete,
+        overlay 0.18s allow-discrete;
+}
+.confirm[open]::backdrop {
+    opacity: 1;
+}
+@starting-style {
+    .confirm[open]::backdrop {
+        opacity: 0;
+    }
+}
+.confirm p {
+    margin: 0 0 1.25rem;
+}
+.confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
 .error {
     color: #b3324c;
     font-size: 0.9rem;
@@ -292,7 +378,9 @@ input[type="password"] {
     .heart,
     .month,
     .gallery figure,
-    .progress span {
+    .progress span,
+    .confirm,
+    .confirm::backdrop {
         animation: none;
         transition: none;
     }
