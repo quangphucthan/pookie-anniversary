@@ -87,10 +87,10 @@ h1 {
         transform: scale(1);
     }
 }
-/* Photos arrive a beat after the page settles. No `to` frame: the end state is
-   whatever the element already computes to, so this stays a pure fade-and-rise.
-   `backwards` holds the first frame during the delay -- without it a staggered
-   tile flashes at full opacity before dropping back to animate. */
+/*  Photos arrive a beat after the page settles. No `to` frame: the end state is
+    whatever the element already computes to, so this stays a pure fade-and-rise.
+    `backwards` holds the first frame during the delay -- without it a staggered
+    tile flashes at full opacity before dropping back to animate. */
 @keyframes rise {
     from {
         opacity: 0;
@@ -102,44 +102,38 @@ h1 {
     animation: rise 0.55s ease-out backwards;
 }
 .gallery figure {
-    /* --i is the tile's place in its own section, capped in page.tsx. */
+    /* --i is the tile's place on its page, capped in Album.tsx. */
     animation-delay: calc(var(--i, 0) * 55ms);
+    margin: 0;
 }
 
 .month {
     margin-top: 2.25rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
 }
-.month h2 {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    margin: 0;
+/* Native select: the OS picker does the scrolling once the years pile up.
+   The arrow is a data URI, so the colour is --soft written out by hand. */
+.months {
+    font: inherit;
     font-size: 0.95rem;
-    font-weight: 400;
     font-style: italic;
     color: var(--soft);
-}
-/* Hairlines either side of the month, drawn by the flex leftovers. */
-.month h2::before,
-.month h2::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: var(--line);
+    border: 0;
+    padding: 0.25rem 1.4rem 0.25rem 0.5rem;
+    appearance: none;
+    cursor: pointer;
+    background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M6 9l6 6 6-6' fill='none' stroke='%238a6f7a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>")
+        no-repeat right center / 1rem;
 }
 
 .gallery {
     display: grid;
-    /* auto-fill, not auto-fit: auto-fit collapses the empty tracks, so a lone
-     photo would stretch across the whole column and shrink as you add more.
-     Thumbnails stay ~9rem no matter how many there are. */
-    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.75rem;
     margin-top: 1rem;
 }
-.gallery figure {
-    margin: 0;
-}
+
 .shot {
     position: relative;
     aspect-ratio: 1;
@@ -154,6 +148,40 @@ h1 {
     font-size: 0.8rem;
     color: var(--soft);
     margin-top: 0.35rem;
+}
+.pager {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+.chevron {
+    background: none;
+    color: var(--soft);
+    padding: 0.25rem;
+    line-height: 0;
+}
+.chevron svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+.chevron:disabled {
+    cursor: default;
+    opacity: 0.3;
+}
+.dots {
+    display: flex;
+    gap: 0.4rem;
+}
+.dots i {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--line);
+}
+.dots i[aria-current] {
+    background: var(--accent);
 }
 .empty {
     color: var(--soft);
