@@ -16,7 +16,7 @@ const subscribe = (onChange: () => void) => {
     return () => clearInterval(id);
 };
 
-export default function Counter({ since }: { since: string }) {
+export default function Counter({ since }: { readonly since: string }) {
     const start = new Date(since);
     // null on the server and during hydration -- the clock only exists in the
     // browser, and React swaps in the real value on the first client render.
