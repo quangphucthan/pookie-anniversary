@@ -87,10 +87,45 @@ h1 {
         transform: scale(1);
     }
 }
-@media (prefers-reduced-motion: reduce) {
-    .heart {
-        animation: none;
+/* Photos arrive a beat after the page settles. No `to` frame: the end state is
+   whatever the element already computes to, so this stays a pure fade-and-rise.
+   `backwards` holds the first frame during the delay -- without it a staggered
+   tile flashes at full opacity before dropping back to animate. */
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(0.75rem) scale(0.985);
     }
+}
+.month,
+.gallery figure {
+    animation: rise 0.55s ease-out backwards;
+}
+.gallery figure {
+    /* --i is the tile's place in its own section, capped in page.tsx. */
+    animation-delay: calc(var(--i, 0) * 55ms);
+}
+
+.month {
+    margin-top: 2.25rem;
+}
+.month h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--soft);
+}
+/* Hairlines either side of the month, drawn by the flex leftovers. */
+.month h2::before,
+.month h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
 }
 
 .gallery {
@@ -100,7 +135,7 @@ h1 {
      Thumbnails stay ~9rem no matter how many there are. */
     grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
     gap: 0.75rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 .gallery figure {
     margin: 0;
@@ -123,7 +158,21 @@ h1 {
 .empty {
     color: var(--soft);
     font-style: italic;
-    margin-top: 2rem;
+    margin-top: 2.5rem;
+}
+.empty svg {
+    display: block;
+    width: 7.5rem;
+    height: auto;
+    margin: 0 auto 0.9rem;
+}
+.empty p {
+    margin: 0;
+}
+.empty .hint {
+    font-size: 0.85rem;
+    opacity: 0.75;
+    margin-top: 0.4rem;
 }
 
 .bar {
@@ -176,8 +225,47 @@ input[type="password"] {
     gap: 0.75rem;
     text-align: left;
 }
+/* One notch per file finished -- storage-js uploads over fetch, so there is no
+   byte-level progress to report and pretending otherwise would be theatre. */
+.progress {
+    max-width: 12rem;
+    height: 3px;
+    margin: 0.85rem auto 0;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.progress span {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    border-radius: inherit;
+    transition: width 0.25s ease-out;
+}
+
 .error {
     color: #b3324c;
     font-size: 0.9rem;
     margin: 0;
+}
+/* The toolbar can raise one line per bad file; the login form spaces its own. */
+.bar + .error,
+.progress + .error {
+    margin-top: 0.75rem;
+}
+.error + .error {
+    margin-top: 0.25rem;
+}
+
+/* Every motion opt-out lives here, and this block has to stay at the bottom of
+   the file: a media query adds no specificity, so an `animation` declared later
+   than this one would quietly win and the reduce setting would do nothing. */
+@media (prefers-reduced-motion: reduce) {
+    .heart,
+    .month,
+    .gallery figure,
+    .progress span {
+        animation: none;
+        transition: none;
+    }
 }
